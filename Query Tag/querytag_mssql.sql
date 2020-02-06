@@ -32,26 +32,40 @@ DECLARE @return_table TABLE (
 	[t_stamp] [bigint])
 
 DECLARE @temp_partition varchar(255);
-DECLARE @sql AS NVARCHAR(max) 
+DECLARE @interval AS nvarchar(5) = 15
+DECLARE @date as NVARCHAR(200) = 'dateadd(minute, (datediff(minute, 0, 
+									dateadd(s, convert(bigint, t_stamp)/1000, 
+									convert(datetime, ''1-1-1970 00:00:00'')))/ '+@interval+') * '+@interval+', 0)';
 OPEN partition;
 	FETCH NEXT FROM partition INTO @temp_partition
 	WHILE @@FETCH_STATUS = 0
 		BEGIN
-			SET @sql = N'SELECT * FROM '
-			INSERT INTO @return_table
-			exec (@sql + @temp_partition + ' WHERE tagid IN
-			(SELECT id FROM sqlth_te where tagpath IN (@path_name))')
+			--select * from dbo.@temp_partition
+			--INSERT INTO @return_table
+			exec ('select ' + @date + ' as t_stamp, avg(floatvalue) as value 
+			from ' + @temp_partition + ' where t_stamp between 1578346898532 and 1578347118529 
+			group by ' + @date)
 			FETCH NEXT FROM partition INTO @temp_partition
 		END
 CLOSE partition;
 
-SELECT * from @return_table order by t_stamp DESC
+--SELECT * from @return_table order by t_stamp DESC
 --SELECT * from sqlth_te where tagpath IN (@path_name);
 -- From 
 -- Monday, January 6, 2020 10:12:28.525 PM
--- to 
+-- 
 -- January 7, 2020 4:45:18.529 AM 
 --GO;
+select [dbo].[return_date]('1970-01-2')
+/*
+create function dbo.return_date
+(@param1 smalldatetime)
+returns bigint
+as
+begin
+    return (select DATEDIFF_big(ms, '1970-01-01 00:00:00', @param1))
+end
+go
 
 --DECLARE @tags CURSOR;
 --SET @tags = CURSOR FOR (SELECT id FROM [EC_DB].[dbo].[sqlth_te] where tagpath IN (@path_name);
