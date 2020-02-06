@@ -1,0 +1,39 @@
+
+
+# Case sensitive 
+tag_path = [
+    "be-mill_out_amp",
+    "mill drive_power",
+    "mill_ch1_water spray",
+    "mill_in_pres",
+    "mill_out_pres",
+    "mill_out_temp",
+    "be-rp_in_amp",
+    "feed gate1_open",
+    "feed gate2_open",
+    "rp drive-m1_amp",
+    "rp drive-m2_amp",
+    "slide gate_drive_open",
+    "slide gate_nondrive_open",
+    "sep fan_damper",
+    "sep fan_power",
+    "sep_motor_amp",
+    "sep_motor_speed",
+    "hopper_cli_lev",
+    "tot_feed"
+]
+
+cement_no = 1
+tag_value = []
+query = "INSERT INTO ML_DATA (t_stamp, tag_value, tag_name) "
+for i in tag_path:
+    # Case not sensitive 
+    query = query + "(SYSDATETIME(), ?, ?)"
+    tag_value.append(system.tag.read("[KW_TAG]CM"+ cement_no +"/Cement Mill/" + i ))
+    
+    # Last Iteration
+    if len()
+    
+
+
+    

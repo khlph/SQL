@@ -1,0 +1,33 @@
+TL6_KILN_SP1_DEFLECTION     =    system.tag.read("[TL_Tag]TL6/Kiln/Kiln_Tire_1_Deflection")
+TL6_KILN_SP2_DEFLECTION     =    system.tag.read("[TL_Tag]TL6/Kiln/Kiln_Tire_2_Deflection")
+TL6_KILN_SP3_DEFLECTION     =    system.tag.read("[TL_Tag]TL6/Kiln/Kiln_Tire_3_Deflection")
+TL6_KILN_SP1_MIGRATION     =    system.tag.read("[TL_Tag]TL6/Kiln/Kiln_Tire_1_Migration")
+TL6_KILN_SP2_MIGRATION     =    system.tag.read("[TL_Tag]TL6/Kiln/Kiln_Tire_2_Migration")
+TL6_KILN_SP3_MIGRATION     =    system.tag.read("[TL_Tag]TL6/Kiln/Kiln_Tire_3_Migration")
+
+t1_v    =   TL6_KILN_SP1_DEFLECTION.value
+t2_v    =   TL6_KILN_SP2_DEFLECTION.value
+t3_v    =   TL6_KILN_SP3_DEFLECTION.value
+t4_v    =   TL6_KILN_SP1_MIGRATION.value
+t5_v    =   TL6_KILN_SP2_MIGRATION.value
+t6_v    =   TL6_KILN_SP3_MIGRATION.value
+
+t1_n     = "TL6_KILN_SP1_DEFLECTION"
+t2_n     = "TL6_KILN_SP2_DEFLECTION"
+t3_n     = "TL6_KILN_SP3_DEFLECTION"
+t4_n     = "TL6_KILN_SP1_MIGRATION"
+t5_n     = "TL6_KILN_SP2_MIGRATION"
+t6_n     = "TL6_KILN_SP3_MIGRATION"
+
+s1 = "VALUES (SYSDATETIME(),?,?)"
+s2 = ",(SYSDATETIME(),?,?)"
+s3 = ",(SYSDATETIME(),?,?)"
+s4 = ",(SYSDATETIME(),?,?)"
+s5 = ",(SYSDATETIME(),?,?)"
+s6 = ",(SYSDATETIME(),?,?)"
+
+db_connection = "MRO_ML"
+query = "INSERT INTO ML_DATA (t_stamp,tag_value,tag_name)" +s1+s2+s3+s4+s5+s6
+args = [t1_v,t1_n,t2_v,t2_n,t3_v,t3_n,t4_v,t4_n,t5_v,t5_n,t6_v,t6_n]
+
+system.db.runPrepUpdate(query,args,db_connection)

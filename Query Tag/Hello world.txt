@@ -1,0 +1,83 @@
+[KW_Tag]KW1/Kiln/Kiln drive1_Amp-p -> Need delete [KW_Tag]
+
+
+(SELECT id FROM sqlth_te
+Where tagpath = 'KW1/Kiln/Kiln drive1_Amp-p'
+)
+--->ID=130646
+--->SCID = 24, 13, 1
+
+drvid = 3, 3, 3 //from sqlth_sciinfo
+
+
+
+
+SELECT TOP 101 * FROM sqlt_data_2_2019_11
+Where tagid in 
+(SELECT id FROM sqlth_te
+Where tagpath = 'KW1/Kiln/Kiln drive1_Amp-p'
+) and created >= ...
+
+
+Select id from sqlth_drv
+Where name in
+(
+	Select name from sqlth_drv
+	Where id in 
+	(
+		Select distinct drvid from sqlth_scinfo
+		Where id in
+		(
+			Select scid from sqlth_te
+			Where tagpath = 'KW1/Kiln/Kiln drive1_Amp-p'
+		)
+	)
+) and id != 
+	(	
+	Select distinct drvid from sqlth_scinfo
+	Where id in
+		(
+		Select scid from sqlth_te
+		Where tagpath = 'KW1/Kiln/Kiln drive1_Amp-p'
+		)
+	)
+
+--> 2
+
+Select pname from sqlth_partitions
+Where drvid = .... and start_time >= ... and end_time <= ...
+Order by pname asc
+
+1569888000
+1572541200000
+1572566400
+1572566400000
+----- > 1574667665365 --- 2:41 PM 11/25/2019 
+----- > 1574640000000 --- 2019-11-25
+1574667634
+
+Select pname from sqlth_partitions
+Where drvid in (
+	Select id from sqlth_drv
+	Where name in
+	(
+		Select name from sqlth_drv
+		Where id in 
+		(
+			Select distinct drvid from sqlth_scinfo
+			Where id in
+			(
+				Select scid from sqlth_te
+				Where tagpath = 'KW1/Kiln/Kiln drive1_Amp-p'
+			)
+		)
+	) and id != 
+		(	
+		Select distinct drvid from sqlth_scinfo
+		Where id in
+			(
+			Select scid from sqlth_te
+			Where tagpath = 'KW1/Kiln/Kiln drive1_Amp-p'
+			)
+		)
+	) and start_time >= DATEDIFF_BIG(ms, '1970-01-01', '2019-10-01')  
