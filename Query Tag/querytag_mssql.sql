@@ -10,10 +10,13 @@ DECLARE @start_time varchar(100);
 SET @start_time = '2020-01-01';
 
 DECLARE @end_time varchar(100);
-SET @end_time = '2020-01-10';
+SET @end_time = '2020-02-29';
 
 DECLARE @path_name varchar(max);
 SET @path_name = 'cm2/feeder/cli_feed';
+
+select DATEDIFF_BIG(ms, '1970-01-01', format(convert(datetime, @start_time), 'yyyy-MM-01'))-25200000 as start_time, 
+DATEDIFF_BIG(ms, '1970-01-01', dateadd(month, 1, format(convert(datetime, @end_time), 'yyyy-MM-01')))-25200000 as end_time
 
 DECLARE partition cursor local for 
 	select distinct pname from ( Select distinct scid from sqlth_te where tagpath = @path_name) te
@@ -22,7 +25,8 @@ DECLARE partition cursor local for
 		INNER JOIN sqlth_partitions as partitions_table on drv.id -1 = partitions_table.drvid 
 		where start_time >= DATEDIFF_BIG(ms, '1970-01-01', format(convert(datetime, @start_time), 'yyyy-MM-01'))-25200000
 			and end_time <= DATEDIFF_BIG(ms, '1970-01-01', dateadd(month, 1, format(convert(datetime, @end_time), 'yyyy-MM-01')))-25200000
-
+		-- Start and end time manage to select the partition even the intervals weren't during a month
+		-- However 25200000 was fixed due database store in UTC 
 
 -- Declare Temporary Table (Structure same as the partitions) 
 	DECLARE @return_table TABLE (
